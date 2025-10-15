@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do-List</title>
+</head>
+
+<body>
+
+    <div class="side-bar" style="border: 1px solid red;">
+        <div>
+            <span>Menu Buttons</span>
+            <div class="menu-btns">
+                <button class="new-task-btn">New Task</button>
+                <button class="new-project-btn">New Project</button>
+                <button>Completed</button>
+                <button>All Tasks</button>
+            </div>
+        </div>
+
+        <div class="my-projects">
+            <span>My Projects</span>
+            <div class="project-btn">
+                <span>📂</span>
+                <button>Default Project</p>
+                <button>🗑️</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="header" style="background-color: aqua;">
+            To Do List
+        </div>
+        <div class="main">
+            <button class="new-task-btn">New Task</button>
+            <!-- <div class="todo-items" style="border: 1px solid black;">
+                <input type="checkbox" id="checkbox">
+                <div>
+                    <h3 id="name">Bath</h3>
+                    <p id="details">Bath with cold water</p>
+                    <p id="due-time">Due dy October 15th 2025</p>
+                </div>
+                <div>
+                    <button>📝</button>
+                    <button>🗑️</button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <dialog class="create-task-dialog">
+        <h1>Create New Task</h1>
+        <form>
+
+            <div>
+                <label for="task-name">
+                    Task Name
+                </label>
+                <input type="text" id="task-name" required>
+            </div>
+
+            <div>
+                <label for="project-folder">
+                    Project Folder
+                </label>
+                <select id="project-folder">
+                    <option value="Default Folder">Default Folder</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="due-date">
+                    Due Date
+                </label>
+                <input type="date" id="due-date" required>
+            </div>
+
+            <div>
+                <label for="my-dropdown">
+                    Set Priority
+                </label>
+                <select name="priorities" id="my-dropdown" required>
+                    <option disabled>Select Priority</option>
+                    <option value="High">High</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="description">
+                    Description
+                </label>
+                <input type="text" id="description" required>
+            </div>
+
+            <div>
+                <button id="submit">Submit</button>
+                <button id="cancel">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="create-project-dialog">
+        <h1>
+            Create New Project
+        </h1>
+        <div>
+            <label for="project-name">Project Name</label>
+            <input type="text" id="project-name" required>
+        </div>
+        <div>
+            <button id="submit2">Submit</button>
+            <button id="cancel2">Cancel</button>
+        </div>
+    </dialog>
+
+</body>
+
+</html>
