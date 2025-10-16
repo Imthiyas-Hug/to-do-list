@@ -22,19 +22,26 @@ const dueDateInput = document.querySelector('#due-date');
 const priorityInput = document.querySelector('#my-dropdown');
 const descriptionInput = document.querySelector('#description');
 
-const projectNames = [];
+const projectNames = ['Default Project'];
+const taskBox = [];
+console.log('project',projectNames)
 const selectElement = document.querySelector('#project-folder');
 
+const main = document.querySelector('.main');
+const projectBtn = document.querySelector('.project-btn')
+
 class NewTask {
-    constructor(name, description, dueDate) {
+    constructor(name, description, dueDate, id) {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.projectFolderId = id;
+
     }
 }
 
 class NewProject {
-    constructor(name){
+    constructor(name) {
         this.name = name;
     }
 }
@@ -50,8 +57,8 @@ newTaskBtn.forEach(btn => {
 
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    if (taskNameInput.value && projectFolderInput.value && dueDateInput.value && priorityInput.value && descriptionInput.value) {
-        const todoItemInputs = new NewTask(taskNameInput.value, descriptionInput.value, dueDateInput.value);
+    if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
+        const todoItemInputs = new NewTask(taskNameInput.value, descriptionInput.value, dueDateInput.value, projectFolderInput.value);
         appendToDo(todoItemInputs);
         newTaskDialog.close();
     }
@@ -61,7 +68,7 @@ cancelBtn.addEventListener('click', () => {
     newTaskDialog.close();
 })
 
-newProjectBtn.addEventListener('click',()=>{
+newProjectBtn.addEventListener('click', () => {
     projectNameInput.value = '';
     newProjectDialog.showModal();
 })
@@ -70,10 +77,14 @@ submitBtn2.addEventListener('click', (event) => {
     event.preventDefault();
     if (projectNameInput.value) {
         const projectNameValue = new NewProject(projectNameInput.value);
-        appendProject(projectNameValue);
-        projectNames.push(projectNameValue);
+        console.log('project',projectNameInput.value);
+
+        console.log("uhjlkjl",projectNameValue)
+        projectNames.push(projectNameValue.name);
+        
+        appendProject();
+        addProjectFolder();
         newProjectDialog.close();
-        console.log(projectNames)
     }
 })
 
@@ -81,9 +92,25 @@ cancelBtn2.addEventListener('click', () => {
     newProjectDialog.close();
 })
 
-projectNames.forEach(name =>{
-    const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
-    selectElement.appendChild(option);
+function addProjectFolder() {
+    projectNames.forEach((elem, index, array) => {
+        if (index == array.length - 1) {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = elem;
+            selectElement.appendChild(option);
+        }
+    })
+}
+
+projectBtn.addEventListener('click', (event) => {
+    Array.from(main.children).forEach(elem => {        
+        if (event.target.dataset.id == elem.id) {
+            console.log('task id',elem.id);
+            main.append(elem);
+        }
+    })
 })
+
+export { projectNames };
+

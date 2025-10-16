@@ -1,9 +1,11 @@
-const main = document.querySelector('.main');
+import { projectNames } from "./index.js";
+
 const myProjects = document.querySelector('.my-projects');
+const main = document.querySelector('.main');
 
-export function appendToDo(task){
+export function appendToDo(task) {
     const todoItemDiv = document.createElement('div');
-
+    todoItemDiv.id = task.projectFolderId;
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
 
@@ -14,6 +16,7 @@ export function appendToDo(task){
     description.textContent = task.description;
     const dueDate = document.createElement('p');
     dueDate.textContent = task.dueDate;
+
     taskDetailDueDiv.append(taskName, description, dueDate);
 
     const buttonsDiv = document.createElement('div');
@@ -25,19 +28,34 @@ export function appendToDo(task){
     main.append(todoItemDiv);
 }
 
-export function appendProject(project){
-    const projectBtnDiv = document.createElement('div');
-    projectBtnDiv.classList.add('project-btn');
+export function appendProject() {
 
-    const fileIcon = document.createElement('span');
-    fileIcon.textContent = '📂';
+    projectNames.forEach((value, index, array) => {
+        if (index == array.length - 1) {
+            const projectBtnDiv = document.createElement('div');
+            projectBtnDiv.classList.add('project-btn');
+            projectBtnDiv.dataset.id = index;
 
-    const projectBtn = document.createElement('button');
-    projectBtn.textContent = project.name;
+            const fileIcon = document.createElement('span');
+            fileIcon.textContent = '📂';
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = '🗑️';
+            const projectBtn = document.createElement('button');
+            projectBtn.textContent = value;
 
-    projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
-    myProjects.append(projectBtnDiv);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '🗑️';
+
+            projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
+            myProjects.append(projectBtnDiv);
+
+            projectBtnDiv.addEventListener('click',(event)=>{
+                Array.from(main.children).forEach(elem=>{
+                    if(event.target.dataset.id == elem.id){
+                        main.textContent = '';
+                        main.append(elem);
+                    }
+                })
+            })
+        }
+    });
 }

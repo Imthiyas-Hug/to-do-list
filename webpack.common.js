@@ -32,4 +32,11 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
+
+    resolve: {
+        fallback: {
+            vm: require.resolve('vm-browserify')
+        }
+    }
+
 };

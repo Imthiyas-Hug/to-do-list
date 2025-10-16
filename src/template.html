@@ -10,6 +10,7 @@
 <body>
 
     <div class="side-bar" style="border: 1px solid red;">
+
         <div>
             <span>Menu Buttons</span>
             <div class="menu-btns">
@@ -22,7 +23,7 @@
 
         <div class="my-projects">
             <span>My Projects</span>
-            <div class="project-btn">
+            <div class="project-btn" data-id="0" style="border: 1px solid;">
                 <span>📂</span>
                 <button>Default Project</p>
                 <button>🗑️</button>
@@ -30,12 +31,14 @@
         </div>
 
     </div>
+
     <div class="container">
         <div class="header" style="background-color: aqua;">
             To Do List
         </div>
+        <button class="new-task-btn">New Task</button>
         <div class="main">
-            <button class="new-task-btn">New Task</button>
+            
             <!-- <div class="todo-items" style="border: 1px solid black;">
                 <input type="checkbox" id="checkbox">
                 <div>
@@ -48,6 +51,10 @@
                     <button>🗑️</button>
                 </div>
             </div> -->
+
+        </div>
+        <div >
+
         </div>
     </div>
 
@@ -67,7 +74,7 @@
                     Project Folder
                 </label>
                 <select name="projects" id="project-folder">
-                    <option value="Default Folder">Default Folder</option>
+                    <option value="0" >Default Project</option>
                 </select>
             </div>
 
