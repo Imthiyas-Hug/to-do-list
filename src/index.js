@@ -31,12 +31,12 @@ const main = document.querySelector('.main');
 const projectBtn = document.querySelector('.project-btn')
 
 class NewTask {
-    constructor(name, description, dueDate, id) {
+    constructor(name, id, dueDate, priority, description,) {
         this.name = name;
-        this.description = description;
-        this.dueDate = dueDate;
         this.projectFolderId = id;
-
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.description = description;
     }
 }
 
@@ -58,7 +58,7 @@ newTaskBtn.forEach(btn => {
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
     if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
-        const todoItemInputs = new NewTask(taskNameInput.value, descriptionInput.value, dueDateInput.value, projectFolderInput.value);
+        const todoItemInputs = new NewTask(taskNameInput.value, projectFolderInput.value, dueDateInput.value, descriptionInput.value, priorityInput.value);
         appendToDo(todoItemInputs);
         newTaskDialog.close();
     }
