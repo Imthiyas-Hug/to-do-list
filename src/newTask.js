@@ -1,5 +1,7 @@
 import { currentProject } from "./defaultFolder";
-import { appendToDo , myProjects} from "./domstuff";
+import { appendToDo, myProjects } from "./domstuff";
+import { completedTaskBtn } from "./completed";
+import { allTasksBtn } from "./allTasks";
 
 const newTaskBtn = document.querySelectorAll(".new-task-btn");
 const newTaskDialog = document.querySelector(".create-task-dialog");
@@ -13,21 +15,29 @@ const descriptionInput = document.querySelector("#description");
 const main = document.querySelector(".main");
 
 class NewTask {
-  constructor(name, id, dueDate, priority, description) {
-    this.name = name;
-    this.projectFolderId = id;
-    this.dueDate = dueDate;
-    this.priority = priority;
-    this.description = description;
-  }
+    constructor(name, id, dueDate, priority, description) {
+        this.name = name;
+        this.projectFolderId = id;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.description = description;
+    }
 }
 
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
     if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
         const todoItemInputs = new NewTask(taskNameInput.value, projectFolderInput.value, dueDateInput.value, priorityInput.value, descriptionInput.value);
-        currentProject.textContent =  projectFolderInput.options[projectFolderInput.selectedIndex].text;
-        myProjects.querySelector('.active').classList.remove('active');
+        currentProject.textContent = projectFolderInput.options[projectFolderInput.selectedIndex].text;
+        if (myProjects.querySelector('.active') !== null) {
+            myProjects.querySelector('.active').classList.remove('active');
+        }
+        if (completedTaskBtn.classList.contains('active')) {
+            completedTaskBtn.classList.remove('active');
+        }
+        if (allTasksBtn.classList.contains('active')) {
+            allTasksBtn.classList.remove('active');
+        }
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
         appendToDo(todoItemInputs);
         newTaskDialog.close();
