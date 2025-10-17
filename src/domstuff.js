@@ -3,11 +3,11 @@ import { currentProject } from "./defaultFolder.js";
 
 const editTaskDialog = document.querySelector(".edit-task-dialog");
 const submitBtn = document.querySelector("#submit3");
-const taskNameInput = document.querySelector("#task-name");
+const taskNameInput = document.querySelector("#task-name2");
 const projectFolderInput = document.querySelector("#project-folder");
-const dueDateInput = document.querySelector("#due-date");
+const dueDateInput = document.querySelector("#due-date2");
 const priorityInput = document.querySelector("#my-dropdown");
-const descriptionInput = document.querySelector("#description");
+const descriptionInput = document.querySelector("#description2");
 const cancelBtn = document.querySelector("#cancel3");
 
 export const myProjects = document.querySelector('.my-projects');
@@ -39,28 +39,6 @@ export function appendToDo(task) {
     const editBtn = document.createElement('button');
     editBtn.textContent = 'Edit';
 
-    editBtn.addEventListener('click', () => {
-        taskNameInput.value = taskName.textContent;
-        dueDateInput.value = dueDate.textContent;
-        descriptionInput.value = description.textContent;
-        editTaskDialog.showModal();
-    })
-
-    submitBtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
-            taskName.textContent = taskNameInput.value;
-            todoItemDiv.id = projectFolderInput.value;
-            description.textContent = descriptionInput.value;
-            dueDate.textContent = dueDateInput.value;
-            editTaskDialog.close();
-        }
-    })
-
-    cancelBtn.addEventListener('click', () => {
-        editTaskDialog.close();
-    })
-
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
     buttonsDiv.append(editBtn, deleteBtn);
@@ -86,6 +64,30 @@ export function appendToDo(task) {
             completedBox = completedBox.filter(elem => ((elem.querySelector('#my-checkbox').checked)));
         }
     })
+
+    editBtn.addEventListener('click', () => {
+        taskNameInput.value = taskName.textContent;
+        dueDateInput.value = dueDate.textContent;
+        descriptionInput.value = description.textContent;
+        editTaskDialog.showModal();
+    })
+
+    submitBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        console.log(taskNameInput.value)
+        taskName.textContent = taskNameInput.value;
+        todoItemDiv.id = projectFolderInput.value;
+        description.textContent = descriptionInput.value;
+        dueDate.textContent = dueDateInput.value;
+        editTaskDialog.close();
+
+    })
+
+    cancelBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        editTaskDialog.close();
+    })
+
 
 }
 
