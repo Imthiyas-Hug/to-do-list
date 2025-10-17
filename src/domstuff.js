@@ -1,7 +1,9 @@
-import { projectNames } from "./index.js";
+import { projectNames } from "./newProject.js";
+import { currentProject } from "./defaultFolder.js";
 
-const myProjects = document.querySelector('.my-projects');
-const main = document.querySelector('.main');
+export const myProjects = document.querySelector('.my-projects');
+export const main = document.querySelector('.main');
+export const taskBox = [];
 
 export function appendToDo(task) {
     const todoItemDiv = document.createElement('div');
@@ -12,8 +14,10 @@ export function appendToDo(task) {
     const taskDetailDueDiv = document.createElement('div');
     const taskName = document.createElement('h3');
     taskName.textContent = task.name;
+
     const description = document.createElement('p');
     description.textContent = task.description;
+
     const dueDate = document.createElement('p');
     dueDate.textContent = task.dueDate;
 
@@ -25,6 +29,7 @@ export function appendToDo(task) {
     buttonsDiv.append(submitBtn, cancelBtn);
 
     todoItemDiv.append(checkBox, taskDetailDueDiv, buttonsDiv);
+    taskBox.push(todoItemDiv);    
     main.append(todoItemDiv);
 }
 
@@ -47,15 +52,27 @@ export function appendProject() {
 
             projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
             myProjects.append(projectBtnDiv);
+            addActive(value, projectBtnDiv);
 
             projectBtnDiv.addEventListener('click',(event)=>{
-                Array.from(main.children).forEach(elem=>{
-                    if(event.target.dataset.id == elem.id){
-                        main.textContent = '';
+                main.textContent = '';
+                currentProject.textContent = value;
+                taskBox.forEach(elem => {        
+                    if (event.target.dataset.id == elem.id) {
                         main.append(elem);
-                    }
-                })
+                    }   
             })
-        }
+            })
+        }   
     });
+}
+
+function addActive(value, projectBtnDiv){
+    main.textContent = '';
+    currentProject.textContent = value;
+    projectBtnDiv.classList.add('active');
+    
+}
+export function removeActive(projectBtnDiv){
+    projectBtnDiv.classList.remove('active');
 }

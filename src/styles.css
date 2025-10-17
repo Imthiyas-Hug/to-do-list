@@ -30,3 +30,13 @@ body{
     display: flex;
     padding-left: 10px;
 }
+.main{
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.active{
+    border: 3px solid black;
+    padding: 10px;
+}

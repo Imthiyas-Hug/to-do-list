@@ -10,20 +10,20 @@
 <body>
 
     <div class="side-bar" style="border: 1px solid red;">
-
+        <h1>To do list</h1>
         <div>
             <span>Menu Buttons</span>
             <div class="menu-btns">
                 <button class="new-task-btn">New Task</button>
                 <button class="new-project-btn">New Project</button>
                 <button>Completed</button>
-                <button>All Tasks</button>
+                <button class="all-tasks-btn">All Tasks</button>
             </div>
         </div>
 
         <div class="my-projects">
             <span>My Projects</span>
-            <div class="project-btn" data-id="0" style="border: 1px solid;">
+            <div class="project-btn" data-id="0">
                 <span>📂</span>
                 <button>Default Project</p>
                 <button>🗑️</button>
@@ -34,7 +34,8 @@
 
     <div class="container">
         <div class="header" style="background-color: aqua;">
-            To Do List
+            <h4>Active project</h2>
+            <h1 class="current-project"></h1>
         </div>
         <button class="new-task-btn">New Task</button>
         <div class="main">
