@@ -1,4 +1,5 @@
-import { appendToDo } from "./domstuff";
+import { currentProject } from "./defaultFolder";
+import { appendToDo , myProjects} from "./domstuff";
 
 const newTaskBtn = document.querySelectorAll(".new-task-btn");
 const newTaskDialog = document.querySelector(".create-task-dialog");
@@ -24,7 +25,10 @@ class NewTask {
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
     if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
-        const todoItemInputs = new NewTask(taskNameInput.value, projectFolderInput.value, dueDateInput.value, descriptionInput.value, priorityInput.value);
+        const todoItemInputs = new NewTask(taskNameInput.value, projectFolderInput.value, dueDateInput.value, priorityInput.value, descriptionInput.value);
+        currentProject.textContent =  projectFolderInput.options[projectFolderInput.selectedIndex].text;
+        myProjects.querySelector('.active').classList.remove('active');
+        myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
         appendToDo(todoItemInputs);
         newTaskDialog.close();
     }

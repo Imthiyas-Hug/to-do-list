@@ -1,15 +1,27 @@
 import { projectNames } from "./newProject.js";
 import { currentProject } from "./defaultFolder.js";
 
+const editTaskDialog = document.querySelector(".edit-task-dialog");
+const submitBtn = document.querySelector("#submit3");
+const taskNameInput = document.querySelector("#task-name");
+const projectFolderInput = document.querySelector("#project-folder");
+const dueDateInput = document.querySelector("#due-date");
+const priorityInput = document.querySelector("#my-dropdown");
+const descriptionInput = document.querySelector("#description");
+const cancelBtn = document.querySelector("#cancel3");
+
 export const myProjects = document.querySelector('.my-projects');
 export const main = document.querySelector('.main');
-export const taskBox = [];
+export let completedBox = [];
+export let taskBox = [];
 
 export function appendToDo(task) {
     const todoItemDiv = document.createElement('div');
     todoItemDiv.id = task.projectFolderId;
+
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
+    checkBox.id = 'my-checkbox';
 
     const taskDetailDueDiv = document.createElement('div');
     const taskName = document.createElement('h3');
@@ -24,13 +36,57 @@ export function appendToDo(task) {
     taskDetailDueDiv.append(taskName, description, dueDate);
 
     const buttonsDiv = document.createElement('div');
-    const submitBtn = document.createElement('button');
-    const cancelBtn = document.createElement('button');
-    buttonsDiv.append(submitBtn, cancelBtn);
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+
+    editBtn.addEventListener('click', (task) => {
+        taskNameInput.value = task.name;
+        dueDateInput.value = task.dueDate;
+        descriptionInput.value = task.description;
+        editTaskDialog.showModal();
+    })
+
+    submitBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (taskNameInput.value && projectFolderInput && dueDateInput.value && priorityInput.value && descriptionInput.value) {
+            taskName.textContent = taskNameInput.value;
+            todoItemDiv.id = projectFolderInput.value;
+            description.textContent = descriptionInput.value;
+            dueDate.textContent = dueDateInput.value;
+            editTaskDialog.close();
+        }
+    })
+
+    cancelBtn.addEventListener('click', () => {
+        editTaskDialog.close();
+    })
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    buttonsDiv.append(editBtn, deleteBtn);
 
     todoItemDiv.append(checkBox, taskDetailDueDiv, buttonsDiv);
-    taskBox.push(todoItemDiv);    
-    main.append(todoItemDiv);
+    taskBox.push(todoItemDiv);
+
+    appendItems(task, todoItemDiv);
+
+    checkBox.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            todoItemDiv.style.display = 'none';
+            completedBox.push(todoItemDiv);
+            console.log(taskBox);
+            taskBox = taskBox.filter(elem => (!(elem.querySelector('#my-checkbox').checked)));
+            console.log('before taskbox', taskBox)
+            console.log('before completed', completedBox)
+        }
+        else {
+            todoItemDiv.style.display = 'none';
+            taskBox.push(todoItemDiv);
+            console.log('after taskbox', taskBox)
+            completedBox = completedBox.filter(elem => ((elem.querySelector('#my-checkbox').checked)));
+        }
+    })
+
 }
 
 export function appendProject() {
@@ -54,25 +110,36 @@ export function appendProject() {
             myProjects.append(projectBtnDiv);
             addActive(value, projectBtnDiv);
 
-            projectBtnDiv.addEventListener('click',(event)=>{
+            projectBtnDiv.addEventListener('click', (event) => {
                 main.textContent = '';
                 currentProject.textContent = value;
-                taskBox.forEach(elem => {        
+                myProjects.querySelector('.active').classList.remove('active');
+                projectBtnDiv.classList.add('active');
+                taskBox.forEach(elem => {
                     if (event.target.dataset.id == elem.id) {
+                        elem.style.display = 'block';
                         main.append(elem);
-                    }   
+                    }
+                })
             })
-            })
-        }   
+        }
     });
 }
 
-function addActive(value, projectBtnDiv){
+function addActive(value, projectBtnDiv) {
     main.textContent = '';
     currentProject.textContent = value;
     projectBtnDiv.classList.add('active');
-    
+
 }
-export function removeActive(projectBtnDiv){
-    projectBtnDiv.classList.remove('active');
+
+function appendItems(task, todoItemDiv) {
+    main.textContent = '';
+    taskBox.forEach(elem => {
+        if (task.projectFolderId == elem.id) {
+            main.append(elem);
+        }
+    })
+    main.append(todoItemDiv);
 }
+

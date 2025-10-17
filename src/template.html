@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do-List</title>
+    <link rel="shortcut icon" href="check-list.png" type="image/x-icon">
 </head>
 
 <body>
@@ -16,7 +17,7 @@
             <div class="menu-btns">
                 <button class="new-task-btn">New Task</button>
                 <button class="new-project-btn">New Project</button>
-                <button>Completed</button>
+                <button class="completed-task-btn">Completed</button>
                 <button class="all-tasks-btn">All Tasks</button>
             </div>
         </div>
@@ -26,7 +27,7 @@
             <div class="project-btn" data-id="0">
                 <span>📂</span>
                 <button>Default Project</p>
-                <button>🗑️</button>
+                    <button>🗑️</button>
             </div>
         </div>
 
@@ -35,12 +36,12 @@
     <div class="container">
         <div class="header" style="background-color: aqua;">
             <h4>Active project</h2>
-            <h1 class="current-project"></h1>
+                <h1 class="current-project"></h1>
         </div>
         <button class="new-task-btn">New Task</button>
         <div class="main">
-            
-            <!-- <div class="todo-items" style="border: 1px solid black;">
+
+            <div class="todo-items" style="border: 1px solid black;">
                 <input type="checkbox" id="checkbox">
                 <div>
                     <h3 id="name">Bath</h3>
@@ -51,10 +52,10 @@
                     <button>📝</button>
                     <button>🗑️</button>
                 </div>
-            </div> -->
+            </div>
 
         </div>
-        <div >
+        <div>
 
         </div>
     </div>
@@ -75,7 +76,7 @@
                     Project Folder
                 </label>
                 <select name="projects" id="project-folder">
-                    <option value="0" >Default Project</option>
+                    <option value="0">Default Project</option>
                 </select>
             </div>
 
@@ -111,6 +112,60 @@
             </div>
         </form>
     </dialog>
+
+    <dialog class="edit-task-dialog">
+        <h1>Edit Task</h1>
+        <form>
+
+            <div>
+                <label for="task-name">
+                    Task Name
+                </label>
+                <input type="text" id="task-name">
+            </div>
+
+            <div>
+                <label for="project-folder">
+                    Project Folder
+                </label>
+                <select name="projects" id="project-folder">
+                    <option value="0">Default Project</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="due-date">
+                    Due Date
+                </label>
+                <input type="date" id="due-date">
+            </div>
+
+            <div>
+                <label for="my-dropdown">
+                    Set Priority
+                </label>
+                <select name="priorities" id="my-dropdown">
+                    <option disabled>Select Priority</option>
+                    <option value="High">High</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="description">
+                    Description
+                </label>
+                <input type="text" id="description">
+            </div>
+
+            <div>
+                <button id="submit3">Submit</button>
+                <button id="cancel3">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
 
     <dialog class="create-project-dialog">
         <h1>
