@@ -39,10 +39,10 @@ export function appendToDo(task) {
     const editBtn = document.createElement('button');
     editBtn.textContent = 'Edit';
 
-    editBtn.addEventListener('click', (task) => {
-        taskNameInput.value = task.name;
-        dueDateInput.value = task.dueDate;
-        descriptionInput.value = task.description;
+    editBtn.addEventListener('click', () => {
+        taskNameInput.value = taskName.textContent;
+        dueDateInput.value = dueDate.textContent;
+        descriptionInput.value = description.textContent;
         editTaskDialog.showModal();
     })
 
