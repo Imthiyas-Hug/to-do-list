@@ -3,7 +3,6 @@ import { currentProject } from "./defaultFolder.js";
 import { completedTaskBtn } from "./completed.js";
 import { allTasksBtn } from "./allTasks.js";
 import { selectElement1 } from "./newProject.js";
-import { defaultActive } from "./defaultFolder.js";
 
 const editTaskDialog = document.querySelector(".edit-task-dialog");
 const submitBtn = document.querySelector("#submit3");
@@ -22,6 +21,7 @@ export let completedBox = [];
 export let taskBox = [];
 
 export function appendToDo(task) {
+
     secondTaskBtn.style.display = 'none';
     const todoItemDiv = document.createElement('div');
     todoItemDiv.id = task.projectFolderId;
@@ -111,8 +111,8 @@ export function appendToDo(task) {
     })
 
     deleteBtn.addEventListener('click', () => {
-        taskBox.splice(todoItemDiv, 1);
-        completedBox.splice(todoItemDiv, 1);
+        taskBox = taskBox.filter(elem => elem.id !== todoItemDiv.id)
+        completedBox = completedBox.filter(elem => elem.id !== todoItemDiv.id)
         main.textContent = '';
         currentProject.textContent = projectFolderInput.options[projectFolderInput.selectedIndex].text;
         if (myProjects.querySelector('.active') !== null) {
@@ -143,7 +143,6 @@ export function appendProject() {
     projectNames.forEach((value, index, array) => {
         if (index == array.length - 1) {
             secondTaskBtn.style.display = 'block';
-
             const projectBtnDiv = document.createElement('div');
             projectBtnDiv.classList.add('project-btn');
             projectBtnDiv.dataset.id = index;
@@ -155,19 +154,12 @@ export function appendProject() {
             projectBtn.textContent = value;
 
             const deleteBtn = document.createElement('button');
+            deleteBtn.classList.add('delete-btn');
             deleteBtn.textContent = '🗑️';
             deleteBtn.id = index;
 
             projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
             myProjects.append(projectBtnDiv);
-
-            deleteBtn.addEventListener('click', (event) => {
-                projectBtnDiv.style.display = 'none';
-                taskBox = taskBox.filter(elem => elem.id !== event.target.id);
-                projectNames.splice(index, 1);
-                selectElement1.options[index] = null;
-                selectElement2.options[index] = null;
-            })
 
             main.textContent = '';
             currentProject.textContent = value;
@@ -196,11 +188,10 @@ export function appendProject() {
                     secondTaskBtn.style.display = 'block';
                 }
             })
+
         }
     });
 }
-
-
 
 function appendItems(task, todoItemDiv) {
     main.textContent = '';

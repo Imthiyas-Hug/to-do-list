@@ -1,5 +1,4 @@
-import { appendProject, myProjects } from "./domstuff";
-import { addProjectToSelect2Element } from "./domstuff";
+import { appendProject, myProjects, addProjectToSelect2Element } from "./domstuff";
 import { completedTaskBtn } from "./completed";
 import { allTasksBtn } from "./allTasks";
 
