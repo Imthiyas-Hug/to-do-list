@@ -2,8 +2,11 @@ import { projectNames } from "./newProject.js";
 import { currentProject } from "./defaultFolder.js";
 import { completedTaskBtn } from "./completed.js";
 import { allTasksBtn } from "./allTasks.js";
+import { defaultActive } from "./defaultFolder.js";
 import { selectElement1 } from "./newProject.js";
+import { saveTodos, saveProjects } from './storage.js';
 
+let currentEditDiv = null; 
 const editTaskDialog = document.querySelector(".edit-task-dialog");
 const submitBtn = document.querySelector("#submit3");
 const taskNameInput = document.querySelector("#task-name2");
@@ -29,15 +32,20 @@ export function appendToDo(task) {
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
     checkBox.id = 'my-checkbox';
+    checkBox.checked = task.completed || false;
+
+    todoItemDiv.dataset.priority = task.priority;
 
     const taskDetailDueDiv = document.createElement('div');
+    taskDetailDueDiv.classList.add('task-detail-dueDiv');
+
     const taskName = document.createElement('h3');
     taskName.textContent = task.name;
 
     const description = document.createElement('p');
     description.textContent = task.description;
 
-    const dueDate = document.createElement('p');
+    const dueDate = document.createElement('span');
     dueDate.textContent = task.dueDate;
 
     taskDetailDueDiv.append(taskName, description, dueDate);
@@ -49,11 +57,23 @@ export function appendToDo(task) {
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
-
+    deleteBtn.classList.add('delete-btn')
+    
     buttonsDiv.append(editBtn, deleteBtn);
 
     todoItemDiv.append(checkBox, taskDetailDueDiv, buttonsDiv);
-    taskBox.push(todoItemDiv);
+    if (checkBox.checked) {
+        completedBox.push(todoItemDiv);
+        todoItemDiv.style.display = 'none'; // hide completed initially
+    } else {
+        taskBox.push(todoItemDiv);
+        saveTodos(taskBox, completedBox);
+    }
+
+    taskBox.forEach((elem, index) =>{
+        elem.dataset.id = index;
+        editBtn.dataset.id = elem.dataset.id;
+    })
 
     appendItems(task, todoItemDiv);
 
@@ -71,49 +91,73 @@ export function appendToDo(task) {
                 main.textContent = 'Looks like no tasks have been completed.'
             }
         }
+        saveTodos(taskBox, completedBox);
     })
 
     editBtn.addEventListener('click', () => {
         if (checkBox.checked) {
             return;
-        }
+        }        
+        currentEditDiv = todoItemDiv;
+
         taskNameInput.value = taskName.textContent;
+        projectFolderInput.value = todoItemDiv.id;
         dueDateInput.value = dueDate.textContent;
         descriptionInput.value = description.textContent;
         editTaskDialog.showModal();
+
     })
 
     submitBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        taskName.textContent = taskNameInput.value;
-        todoItemDiv.id = projectFolderInput.value;
-        description.textContent = descriptionInput.value;
-        dueDate.textContent = dueDateInput.value;
-        todoItemDiv.id = projectFolderInput.value;
+        if (!currentEditDiv) return;
 
-        main.textContent = '';
+        currentEditDiv.id = projectFolderInput.value;
+        currentEditDiv.dataset.priority = priorityInput.value; 
+        currentEditDiv.priority = priorityInput.value;
+        currentEditDiv.completed = currentEditDiv.querySelector('#my-checkbox').checked;
+       
+
+        const title = currentEditDiv.querySelector('.task-detail-dueDiv h3');
+        const description = currentEditDiv.querySelector('.task-detail-dueDiv p');
+        const dueDate = currentEditDiv.querySelector('.task-detail-dueDiv span');
+         
+        if (title) title.textContent = taskNameInput.value;
+        if (description) description.textContent = descriptionInput.value;
+        if (dueDate) dueDate.textContent = dueDateInput.value;
+        
+        const selectedPriority = priorityInput.value; // get selected priority
+        currentEditDiv.dataset.priority = selectedPriority;
+
+        saveTodos(taskBox, completedBox);
+
         currentProject.textContent = projectFolderInput.options[projectFolderInput.selectedIndex].text;
         myProjects.querySelector('.active').classList.remove('active');
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
-        taskBox.forEach(elem => {
-            if (elem.id == projectFolderInput.value) {
-                elem.style.display = 'block';
+
+        main.innerHTML = '';
+        taskBox.forEach(elem =>{
+            if(elem.id == projectFolderInput.value){
                 main.append(elem);
             }
-        })
+        });
+
         editTaskDialog.close();
-
+        currentEditDiv = null;
     })
-
+    
     cancelBtn.addEventListener('click', (event) => {
         event.preventDefault();
         editTaskDialog.close();
     })
 
     deleteBtn.addEventListener('click', () => {
-        taskBox = taskBox.filter(elem => elem.id !== todoItemDiv.id)
-        completedBox = completedBox.filter(elem => elem.id !== todoItemDiv.id)
-        main.textContent = '';
+        todoItemDiv.remove();
+        taskBox = taskBox.filter(elem => elem !== todoItemDiv);
+        completedBox = completedBox.filter(elem => elem !== todoItemDiv);
+
+       saveTodos(taskBox, completedBox);
+
         currentProject.textContent = projectFolderInput.options[projectFolderInput.selectedIndex].text;
         if (myProjects.querySelector('.active') !== null) {
             myProjects.querySelector('.active').classList.remove('active');
@@ -125,73 +169,92 @@ export function appendToDo(task) {
             allTasksBtn.classList.remove('active');
         }
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
-        taskBox.forEach(elem => {
-            if (elem.id == projectFolderInput.value) {
-                elem.style.display = 'block';
-                main.append(elem);
-            }
-        })
-        if (taskBox.length == '0') {
+        const items = taskBox.filter(elem => elem !== todoItemDiv);        
+        if (items.length == '0') {
             secondTaskBtn.style.display = 'block';
+        }
+        else{
+            secondTaskBtn.style.display = 'none';
         }
     })
 
 }
+export function appendProject(projectFolder) {
 
-export function appendProject() {
+        const projectBtnDiv = document.createElement("div");
+        projectBtnDiv.classList.add("project-btn");
+        projectBtnDiv.dataset.id = projectFolder.id;
 
-    projectNames.forEach((value, index, array) => {
-        if (index == array.length - 1) {
-            secondTaskBtn.style.display = 'block';
-            const projectBtnDiv = document.createElement('div');
-            projectBtnDiv.classList.add('project-btn');
-            projectBtnDiv.dataset.id = index;
+        const fileIcon = document.createElement("span");
+        fileIcon.textContent = "📂";
 
-            const fileIcon = document.createElement('span');
-            fileIcon.textContent = '📂';
+        const projectBtn = document.createElement("span");
+        projectBtn.textContent = projectFolder.name;
 
-            const projectBtn = document.createElement('button');
-            projectBtn.textContent = value;
+        const deleteBtn = document.createElement("button");
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.textContent = "🗑️";
+        deleteBtn.id = projectFolder.id;
 
-            const deleteBtn = document.createElement('button');
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.textContent = '🗑️';
-            deleteBtn.id = index;
+        projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
+        myProjects.append(projectBtnDiv);
 
-            projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
-            myProjects.append(projectBtnDiv);
+        main.textContent = "";
+        currentProject.textContent = projectFolder.name;
+        projectBtnDiv.classList.add("active");
+        secondTaskBtn.style.display = 'block';
 
-            main.textContent = '';
-            currentProject.textContent = value;
-            projectBtnDiv.classList.add('active');
+        projectBtnDiv.addEventListener("click", (event) => {
 
-            projectBtnDiv.addEventListener('click', (event) => {
-                main.textContent = '';
-                currentProject.textContent = value;
-                if (myProjects.querySelector('.active') !== null) {
-                    myProjects.querySelector('.active').classList.remove('active');
+            main.textContent = "";
+            currentProject.textContent = projectFolder.name;
+
+            if (myProjects.querySelector(".active") !== null) {
+                myProjects.querySelector(".active").classList.remove("active");
+            }
+
+            if (completedTaskBtn.classList.contains("active")) {
+                completedTaskBtn.classList.remove("active");
+            }
+
+            if (allTasksBtn.classList.contains("active")) {
+                allTasksBtn.classList.remove("active");
+            }
+
+            projectBtnDiv.classList.add("active");
+            taskBox.forEach((elem) => {
+                if (event.target.dataset.id == elem.id) {
+                    elem.style.display = "block";
+                    main.append(elem);
                 }
-                if (completedTaskBtn.classList.contains('active')) {
-                    completedTaskBtn.classList.remove('active');
-                }
-                if (allTasksBtn.classList.contains('active')) {
-                    allTasksBtn.classList.remove('active');
-                }
-                projectBtnDiv.classList.add('active');
-                taskBox.forEach(elem => {
-                    if (event.target.dataset.id == elem.id) {
-                        elem.style.display = 'block';
-                        main.append(elem);
-                    }
-                })
-                if (taskBox.length == '0') {
-                    secondTaskBtn.style.display = 'block';
-                }
-            })
+            });
+            const items = taskBox.filter(elem => elem.id == event.target.dataset.id);
+            if (taskBox.length == '0' || items.length == '0') {
+                secondTaskBtn.style.display = 'block';
+            }
+            else{
+                secondTaskBtn.style.display = 'none';
+            }
+            if(myProjects.querySelector(`[data-id="${event.target.dataset.id}"]`) == null){
+                defaultActive();
+            }
 
-        }
-    });
+         });
+
+        deleteBtn.addEventListener('click',(event)=>{
+                const elemToRemove =  myProjects.querySelector(`[data-id="${event.target.id}"]`)
+                myProjects.removeChild(elemToRemove);
+                taskBox = taskBox.filter(elem => elem.id !== event.target.id);
+                completedBox = completedBox.filter(elem => elem.id !== event.target.id);
+                projectNames.splice(event.target.id, 1);
+                selectElement1.remove(event.target.id);
+                selectElement2.remove(event.target.id);
+
+                saveProjects(projectNames);
+                saveTodos(taskBox); 
+        })
 }
+
 
 function appendItems(task, todoItemDiv) {
     main.textContent = '';

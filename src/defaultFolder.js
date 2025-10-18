@@ -4,7 +4,6 @@ import { allTasksBtn } from "./allTasks";
 
 export const currentProject = document.querySelector('.current-project')
 const projectBtn = document.querySelector('.project-btn');
-const projectDeleteBtn = document.querySelector('.project-delete-btn');
 
 projectBtn.addEventListener('click', (event) => {
     main.textContent = '';
@@ -26,8 +25,12 @@ projectBtn.addEventListener('click', (event) => {
             main.append(elem);
         }
     })
-    if (taskBox.length == '0') {
+    const items = taskBox.filter(elem => elem.id == event.target.dataset.id);
+    if (taskBox.length == '0' || items.length == '0') {
         secondTaskBtn.style.display = 'block';
+    }
+    else{
+        secondTaskBtn.style.display = 'none';
     }
 })
 
@@ -40,4 +43,11 @@ export function defaultActive() {
             main.append(elem);
         }
     })
+    const items = taskBox.filter(elem => elem.id == projectBtn.dataset.id);
+    if (taskBox.length == '0' || items.length == '0') {
+        secondTaskBtn.style.display = 'block';
+    }
+    else{
+        secondTaskBtn.style.display = 'none';
+    }
 }

@@ -1,7 +1,8 @@
 import { currentProject } from "./defaultFolder";
-import { appendToDo, myProjects } from "./domstuff";
+import { appendToDo, completedBox, myProjects, taskBox } from "./domstuff";
 import { completedTaskBtn } from "./completed";
 import { allTasksBtn } from "./allTasks";
+import { saveTodos } from './storage.js';
 
 const newTaskBtn = document.querySelectorAll(".new-task-btn");
 const newTaskDialog = document.querySelector(".create-task-dialog");
@@ -15,12 +16,13 @@ const descriptionInput = document.querySelector("#description");
 const main = document.querySelector(".main");
 
 class NewTask {
-    constructor(name, id, dueDate, priority, description) {
+    constructor(name, id, dueDate, priority, description, completed = false) {
         this.name = name;
         this.projectFolderId = id;
         this.dueDate = dueDate;
         this.priority = priority;
         this.description = description;
+        this.completed = completed;
     }
 }
 
@@ -40,6 +42,7 @@ submitBtn.addEventListener('click', (event) => {
         }
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
         appendToDo(todoItemInputs);
+        saveTodos(taskBox, completedBox); 
         newTaskDialog.close();
     }
 })
