@@ -38,12 +38,21 @@ submitBtn.addEventListener('click', (event) => {
         saveProjects(projectNames);
         addProjectToSelectElement();
         addProjectToSelect2Element();
-        newProjectDialog.close();
+         newProjectDialog.classList.add("dialog-closing");
+        setTimeout(() => {
+          newProjectDialog.classList.remove("dialog-closing");
+          newProjectDialog.close();
+        }, 50);
     }
 })
 
-cancelBtn.addEventListener('click', () => {
-    newProjectDialog.close();
+cancelBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    newProjectDialog.classList.add("dialog-closing");
+    setTimeout(() => {
+      newProjectDialog.classList.remove("dialog-closing");
+      newProjectDialog.close();
+    }, 50);
 })
 
 function addProjectToSelectElement() {

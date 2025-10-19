@@ -19,6 +19,6 @@ allTasksBtn.addEventListener('click', () => {
         main.append(elem);
     })
     if (taskBox.length == '0') {
-        secondTaskBtn.style.display = 'block';
+        secondTaskBtn.style.display = 'flex';
     }
 })

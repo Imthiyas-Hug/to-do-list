@@ -18,7 +18,7 @@ completedTaskBtn.addEventListener('click', () => {
     }
     completedTaskBtn.classList.add('active');
     completedBox.forEach(elem => {
-        elem.style.display = 'block';
+        elem.style.display = 'flex';
         main.append(elem);
         elem.querySelector('.edit-btn').addEventListener('click', () => {
             if (elem.querySelector('input').checked) {
@@ -29,7 +29,10 @@ completedTaskBtn.addEventListener('click', () => {
         })
     })
     if (completedBox.length == '0') {
-        main.textContent = 'Looks like no tasks have been completed.'
+        const text = document.createElement('p');
+        text.textContent = 'Looks like no tasks have been completed.';
+        text.classList.add('text')
+        main.append(text);
     }
 })
 

@@ -21,7 +21,7 @@ projectBtn.addEventListener('click', (event) => {
     projectBtn.classList.add('active');
     taskBox.forEach(elem => {
         if (event.target.dataset.id == elem.id) {
-            elem.style.display = 'block';
+            elem.style.display = 'flex';
             main.append(elem);
         }
     })

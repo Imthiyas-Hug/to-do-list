@@ -5,6 +5,8 @@ import { allTasksBtn } from "./allTasks.js";
 import { defaultActive } from "./defaultFolder.js";
 import { selectElement1 } from "./newProject.js";
 import { saveTodos, saveProjects } from './storage.js';
+import trashIcon from './trash (1).svg';
+import folderIcon from './folder.svg'
 
 let currentEditDiv = null; 
 const editTaskDialog = document.querySelector(".edit-task-dialog");
@@ -26,19 +28,24 @@ export let taskBox = [];
 export function appendToDo(task) {
 
     secondTaskBtn.style.display = 'none';
+
+    // Task container
     const todoItemDiv = document.createElement('div');
     todoItemDiv.id = task.projectFolderId;
-
+    todoItemDiv.classList.add('todo-item'); // New class
+    todoItemDiv.dataset.priority = task.priority;
+    
+    // Checkbox
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
-    checkBox.id = 'my-checkbox';
+    checkBox.id = 'my-checkbox'
+    checkBox.classList.add('task-checkbox'); 
     checkBox.checked = task.completed || false;
 
-    todoItemDiv.dataset.priority = task.priority;
-
+    // Task details container
     const taskDetailDueDiv = document.createElement('div');
     taskDetailDueDiv.classList.add('task-detail-dueDiv');
-
+    
     const taskName = document.createElement('h3');
     taskName.textContent = task.name;
 
@@ -46,25 +53,32 @@ export function appendToDo(task) {
     description.textContent = task.description;
 
     const dueDate = document.createElement('span');
-    dueDate.textContent = task.dueDate;
+    dueDate.textContent = `Due By ${formatDueDate(task.dueDate)}`;
 
     taskDetailDueDiv.append(taskName, description, dueDate);
-
+    
+    // Buttons container
     const buttonsDiv = document.createElement('div');
+    buttonsDiv.classList.add('task-buttons'); // Optional wrapper for styling buttons
+
     const editBtn = document.createElement('button');
     editBtn.classList.add('edit-btn')
     editBtn.textContent = 'Edit';
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete';
+    const deleteBtn = document.createElement('img');
+    deleteBtn.src = trashIcon;
     deleteBtn.classList.add('delete-btn')
     
     buttonsDiv.append(editBtn, deleteBtn);
 
+    // Append checkbox, details, and buttons to task container
     todoItemDiv.append(checkBox, taskDetailDueDiv, buttonsDiv);
+
+    // Handle completed tasks
     if (checkBox.checked) {
         completedBox.push(todoItemDiv);
         todoItemDiv.style.display = 'none'; // hide completed initially
+        todoItemDiv.classList.add('completed-task'); 
     } else {
         taskBox.push(todoItemDiv);
         saveTodos(taskBox, completedBox);
@@ -77,29 +91,51 @@ export function appendToDo(task) {
 
     appendItems(task, todoItemDiv);
 
+    // Checkbox change event
     checkBox.addEventListener('change', (event) => {
+        todoItemDiv.classList.add('ripple');
         if (event.target.checked) {
-            todoItemDiv.style.display = 'none';
+            todoItemDiv.classList.add('completed-task', 'hide');
+
+            setTimeout(() => {
+                todoItemDiv.style.display = 'none';
+                todoItemDiv.classList.remove('hide');
+            }, 600);
+
+            todoItemDiv.classList.add('completed-task');
             completedBox.push(todoItemDiv);
             taskBox = taskBox.filter(elem => (!(elem.querySelector('#my-checkbox').checked)));
         }
-        else {
-            todoItemDiv.style.display = 'none';
+        else 
+            {
+            todoItemDiv.classList.remove('completed-task');
+            todoItemDiv.style.display = 'flex';
+            todoItemDiv.classList.add('show');
+
+            setTimeout(() => {
+                todoItemDiv.classList.remove('show');
+                todoItemDiv.style.display = 'none';
+            }, 200);
             taskBox.push(todoItemDiv);
-            completedBox = completedBox.filter(elem => ((elem.querySelector('#my-checkbox').checked)));
+            completedBox = completedBox.filter(elem => elem.querySelector('#my-checkbox').checked);
+            }
             if (completedBox.length == '0') {
                 main.textContent = 'Looks like no tasks have been completed.'
             }
-        }
+
+        setTimeout(() => {
+            todoItemDiv.classList.remove('ripple');
+        }, 400);
+
         saveTodos(taskBox, completedBox);
     })
 
+     // Edit button
     editBtn.addEventListener('click', () => {
         if (checkBox.checked) {
             return;
         }        
         currentEditDiv = todoItemDiv;
-
         taskNameInput.value = taskName.textContent;
         projectFolderInput.value = todoItemDiv.id;
         dueDateInput.value = dueDate.textContent;
@@ -108,6 +144,7 @@ export function appendToDo(task) {
 
     })
 
+    // Submit edited task
     submitBtn.addEventListener('click', (event) => {
         event.preventDefault();
         if (!currentEditDiv) return;
@@ -124,10 +161,13 @@ export function appendToDo(task) {
          
         if (title) title.textContent = taskNameInput.value;
         if (description) description.textContent = descriptionInput.value;
-        if (dueDate) dueDate.textContent = dueDateInput.value;
+        if (dueDate) dueDate.textContent = `Due By ${formatDueDate(dueDateInput.value)}`;
         
         const selectedPriority = priorityInput.value; // get selected priority
         currentEditDiv.dataset.priority = selectedPriority;
+
+        currentEditDiv.classList.remove('High', 'Medium', 'Low');
+        currentEditDiv.classList.add(selectedPriority);
 
         saveTodos(taskBox, completedBox);
 
@@ -142,21 +182,31 @@ export function appendToDo(task) {
             }
         });
 
-        editTaskDialog.close();
+        editTaskDialog.classList.add("dialog-closing");
+        setTimeout(() =>  editTaskDialog.classList.remove("dialog-closing"), 250);
+       editTaskDialog.close();
         currentEditDiv = null;
     })
     
+    // Cancel edit
     cancelBtn.addEventListener('click', (event) => {
         event.preventDefault();
+        editTaskDialog.classList.add("dialog-closing");
+        setTimeout(() => editTaskDialog.classList.remove("dialog-closing"), 250);
         editTaskDialog.close();
     })
 
-    deleteBtn.addEventListener('click', () => {
+deleteBtn.addEventListener('click', () => {
+    // Add delete animation
+    todoItemDiv.classList.add('delete');
+
+    // After animation ends, remove from DOM and arrays
+    setTimeout(() => {
         todoItemDiv.remove();
         taskBox = taskBox.filter(elem => elem !== todoItemDiv);
         completedBox = completedBox.filter(elem => elem !== todoItemDiv);
 
-       saveTodos(taskBox, completedBox);
+        saveTodos(taskBox, completedBox);
 
         currentProject.textContent = projectFolderInput.options[projectFolderInput.selectedIndex].text;
         if (myProjects.querySelector('.active') !== null) {
@@ -169,14 +219,12 @@ export function appendToDo(task) {
             allTasksBtn.classList.remove('active');
         }
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
+
         const items = taskBox.filter(elem => elem !== todoItemDiv);        
-        if (items.length == '0') {
-            secondTaskBtn.style.display = 'block';
-        }
-        else{
-            secondTaskBtn.style.display = 'none';
-        }
-    })
+        secondTaskBtn.style.display = items.length == 0 ? 'block' : 'none'; 
+    }, 500); // match this duration with CSS transition
+});
+
 
 }
 export function appendProject(projectFolder) {
@@ -185,15 +233,16 @@ export function appendProject(projectFolder) {
         projectBtnDiv.classList.add("project-btn");
         projectBtnDiv.dataset.id = projectFolder.id;
 
-        const fileIcon = document.createElement("span");
-        fileIcon.textContent = "📂";
+        const fileIcon = document.createElement("img");
+        fileIcon.src = folderIcon;
+        fileIcon.classList.add('folder-icon');
 
         const projectBtn = document.createElement("span");
         projectBtn.textContent = projectFolder.name;
 
-        const deleteBtn = document.createElement("button");
+        const deleteBtn = document.createElement("img");
+        deleteBtn.src = trashIcon;
         deleteBtn.classList.add("delete-btn");
-        deleteBtn.textContent = "🗑️";
         deleteBtn.id = projectFolder.id;
 
         projectBtnDiv.append(fileIcon, projectBtn, deleteBtn);
@@ -224,7 +273,7 @@ export function appendProject(projectFolder) {
             projectBtnDiv.classList.add("active");
             taskBox.forEach((elem) => {
                 if (event.target.dataset.id == elem.id) {
-                    elem.style.display = "block";
+                    elem.style.display = "flex";
                     main.append(elem);
                 }
             });
@@ -275,4 +324,9 @@ export function addProjectToSelect2Element() {
             selectElement2.append(option);
         }
     })
+}
+function formatDueDate(dateString) {
+    const date = new Date(dateString); // convert string to Date object
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
 }

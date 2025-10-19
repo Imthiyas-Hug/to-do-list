@@ -1,43 +1,955 @@
-:root{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+/* ================= Reset & Base ================= */
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", Helvetica, sans-serif;
 }
-body{
-    display: flex;
+
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f5f5; /* subtle background for main content */
 }
-.container{
+
+/* ================= Container ================= */
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: hsl(
+    0,
+    0%,
+    100%
+  ); /* light neutral background for contrast */
+  gap: 20px;
+}
+
+/* ================= Header Container ================= */
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 40px;
+  background: hsl(0, 0%, 100%); /* white header */
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+  position: relative;
+  z-index: 1000;
+}
+
+/* Subtle bottom divider */
+.header::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.05);
+  margin-top: 10px;
+}
+
+/* ================= Header Small Title ================= */
+.header h4 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 14px;
+  color: #888; /* subtle gray */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+/* Glow animation */
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 1px 2px 4px rgba(33, 147, 176, 0.25);
+  }
+  50% {
+    text-shadow: 1px 2px 10px rgba(33, 147, 176, 0.4),
+      0 0 12px rgba(33, 147, 176, 0.2);
+  }
+}
+
+/* Floating animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+/* ================= Header Main Project ================= */
+.header .current-project {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: hsla(192, 68%, 51%, 0.795); /* solid sidebar blue */
+  border-left: 4px solid #2193b0;
+  padding-left: 8px;
+  text-shadow: 1px 2px 4px rgba(33, 147, 176, 0.25);
+  animation: glow 3s infinite alternate, float 4s ease-in-out infinite;
+  /* color: hsl(0, 0%, 100%); */
+}
+
+/* Keyframes for button glow */
+@keyframes buttonGlow {
+  0%,
+  100% {
+    box-shadow: 0 6px 16px rgba(33, 147, 176, 0.35), 0 0 0 rgba(33, 147, 176, 0);
+  }
+  50% {
+    box-shadow: 0 8px 20px rgba(33, 147, 176, 0.45),
+      0 0 12px rgba(33, 147, 176, 0.2);
+  }
+}
+
+/* Keyframes for icon shimmer */
+@keyframes iconShimmer {
+  0%,
+  100% {
+    filter: invert(1) brightness(1);
+    transform: translateY(0);
+  }
+  50% {
+    filter: invert(1) brightness(1.4);
+    transform: translateY(-2px);
+  }
+}
+
+/* ================= New Task Button ================= */
+.new-task-btn.second-task-btn {
+  display: inline-flex; /* inline-flex for auto width + centering */
+  align-items: center; /* vertical alignment */
+  justify-content: center; /* horizontal alignment */
+  gap: 12px; /* space between icon and text */
+
+  margin: 20px auto 0 auto; /* horizontally center in container */
+  padding: 20px 48px; /* bigger button for prominence */
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 24px; /* pill-shaped */
+  background: linear-gradient(90deg, #2193b0, #6dd5ed);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(33, 147, 176, 0.35);
+  transition: all 0.3s ease;
+  animation: buttonGlow 3s infinite alternate;
+  text-align: center; /* ensures text is centered if wraps */
+}
+
+/* Hover effect */
+.new-task-btn.second-task-btn:hover {
+  background: linear-gradient(90deg, #6dd5ed, #2193b0);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 22px rgba(33, 147, 176, 0.45);
+}
+
+/* Active press effect */
+.new-task-btn.second-task-btn:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 4px 10px rgba(33, 147, 176, 0.3);
+}
+
+/* Icon inside button */
+.new-task-btn.second-task-btn img.menu-icon {
+  width: 26px;
+  height: 26px;
+  filter: invert(1);
+  vertical-align: top;
+  animation: iconShimmer 2.5s infinite alternate;
+}
+
+/* ================= Sidebar ================= */
+.side-bar {
+  min-width: 220px; /* wider for icons + text */
+  height: 100vh;
+  padding: 25px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: linear-gradient(180deg, #1b6d8f, #6dd5ed);
+  color: white;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Sidebar Heading */
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  filter: invert(1);
+}
+
+/* Section Titles */
+.section-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  color: white;
+}
+
+/* ================= Menu Buttons ================= */
+.menu-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.menu-btns button {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.menu-btns button:hover {
+  background-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.menu-btns button.active {
+  background-color: rgba(255, 255, 255, 0.55);
+  border-left: 4px solid #fff;
+  padding-left: 6px;
+  font-weight: bold;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  filter: invert(1); /* white icons on sidebar */
+}
+
+/* ================= My Projects ================= */
+.my-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 50vh; /* adjust height as needed */
+  overflow-y: auto;
+  padding-right: 5px; /* space for scrollbar */
+}
+
+/* Scrollbar Styling */
+.my-projects::-webkit-scrollbar {
+  width: 6px;
+}
+
+.my-projects::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.my-projects::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Project Buttons */
+.project-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.project-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.project-btn.active {
+  background-color: rgba(255, 255, 255, 0.4);
+  font-weight: bold;
+  border-left: 4px solid #fff;
+  padding-left: 6px;
+}
+
+/* Project Icons */
+.folder-icon {
+  width: 20px;
+  height: 20px;
+  filter: invert(1);
+}
+
+.delete-btn {
+  width: 20px;
+  height: 20px;
+  margin-left: auto; /* pushes it to the right */
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  filter: invert(1);
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  filter: brightness(1.3);
+}
+
+.create-project-dialog {
+  width: 500px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header */
+.create-project-dialog h1 {
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  background: linear-gradient(180deg, #1b6d8f, #6dd5ed);
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+}
+
+/* Form styling */
+.create-project-dialog form {
+  background: white;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Label and input */
+.create-project-dialog label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.create-project-dialog input[type="text"] {
+  width: 90%;
+  padding: 12px 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.25s ease;
+  background: #fafafa;
+}
+
+.create-project-dialog input[type="text"]:focus {
+  border-color: #1e88e5;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.45),
+    0 0 4px rgba(109, 213, 237, 0.3);
+}
+
+/* Button container */
+.create-project-dialog form div:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Buttons */
+#submit2,
+#cancel2 {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0;
+  width: 45%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+
+/* Specific buttons */
+#submit2 {
+  background: linear-gradient(180deg, hsl(198, 68%, 33%), hsl(191, 78%, 68%));
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.35);
+}
+.create-project-dialog #submit2:hover {
+  background: linear-gradient(180deg, hsl(200, 68%, 28%), hsl(191, 77%, 75%));
+  box-shadow: 0 6px 14px rgba(30, 136, 229, 0.45);
+  transform: translateY(-2px);
+  transform: scale(1.05);
+  opacity: 0.9;
+  animation: glowPulse 1.2s infinite alternate;
+}
+/* Cancel Button */
+.create-project-dialog #cancel2 {
+  background: #f1f1f1;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.create-project-dialog #cancel2:hover {
+  background: #e4e4e4;
+  transform: translateY(-2px);
+  animation: softPulse 1.2s infinite alternate;
+}
+
+/* Keyframes for glowing effects */
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 8px rgba(30, 136, 229, 0.4),
+      0 0 16px rgba(109, 213, 237, 0.3);
+  }
+  to {
+    box-shadow: 0 0 14px rgba(30, 136, 229, 0.6),
+      0 0 28px rgba(109, 213, 237, 0.4);
+  }
+}
+
+@keyframes softPulse {
+  from {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes dialogPop {
+  0% {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.create-project-dialog {
+  animation: dialogPop 0.35s ease-out;
+}
+
+/* Center dialog on screen */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+/* Closing animation */
+@keyframes dialogClose {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Class to trigger close animation */
+.dialog-closing {
+  animation: dialogClose 0.25s ease-in forwards;
+}
+/* =======================
+   Shared Task Dialog Styling
+   ======================= */
+.task-dialog {
+  width: 500px;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  animation: dialogPop 0.25s ease-out;
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Header */
+.task-dialog h1 {
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  font-weight: bold;
+  background: linear-gradient(180deg, #1b6d8f, #6dd5ed);
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+}
+
+/* =======================
+   Form styling - Responsive Columns
+   ======================= */
+.task-dialog form {
+  background: white;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 20px 40px;
+}
+
+/* Label styling */
+.task-dialog label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* Input and Select styling */
+.task-dialog input,
+.task-dialog select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.25s ease;
+  background: #fafafa;
+}
+
+.task-dialog input:focus,
+.task-dialog select:focus {
+  border-color: #1e88e5;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(30, 136, 229, 0.3);
+}
+
+/* Stretch the description div across all columns */
+.task-dialog div:has(#description),
+.task-dialog div:has(#description2) {
+  grid-column: 1 / -1;
+}
+
+/* Buttons row spans all columns */
+.task-dialog form div:last-child {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* =======================
+   Buttons Styling
+   ======================= */
+.task-button {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0;
+  width: 45%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+
+/* Submit Buttons */
+#submit,
+#submit3 {
+  background: linear-gradient(180deg, hsl(198, 68%, 33%), hsl(191, 78%, 68%));
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.35);
+}
+
+#submit:hover,
+#submit3:hover {
+  background: linear-gradient(180deg, hsl(200, 68%, 28%), hsl(191, 77%, 75%));
+  box-shadow: 0 6px 14px rgba(30, 136, 229, 0.45);
+  transform: translateY(-2px) scale(1.05);
+  opacity: 0.9;
+}
+
+/* Cancel Buttons */
+#cancel,
+#cancel3 {
+  background: #f1f1f1;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+#cancel:hover,
+#cancel3:hover {
+  background: #e4e4e4;
+  transform: translateY(-2px);
+}
+
+/* =======================
+   Open & Close Animations
+   ======================= */
+@keyframes dialogPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Close animation */
+.task-dialog.closing {
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+/* Center dialog backdrop */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+/* ================= Main Area ================= */
+.main {
+  flex-grow: 1;
+  border-radius: 12px;
+  padding: 0px 0px 0px 20px;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+}
+
+/* Custom scrollbar */
+.main::-webkit-scrollbar {
+  width: 0px;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background-color: rgba(33, 147, 176, 0.4);
+  border-radius: 3px;
+}
+
+.main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ================= Task Item ================= */
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* push buttons to far right */
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  gap: 12px;
+}
+
+/* Checkbox */
+.task-checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Task Details stacked vertically */
+.task-detail-dueDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1; /* takes available space */
+  min-width: 0; /* for ellipsis overflow */
+}
+
+/* Task Name */
+.task-detail-dueDiv h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #000000cc;
+  margin: 0;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Task Description */
+.task-detail-dueDiv p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3c3c3caa;
+  margin: 0;
+  line-height: 1.4;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Due Date */
+.task-detail-dueDiv span {
+  font-size: 0.95rem;
+  color: #244041;
+  text-align: left;
+}
+
+/* ================= Task Buttons Container ================= */
+.task-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* push buttons to right */
+  gap: 10px; /* space between buttons */
+  min-width: 90px; /* optional, keeps layout consistent */
+}
+
+/* ================= Edit Button ================= */
+.edit-btn {
+  padding: 6px 14px;
+  background: linear-gradient(90deg, hsl(137, 90%, 49%), hsl(154, 78%, 48%));
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(33, 147, 176, 0);
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 14px rgba(33, 147, 176, 0);
+}
+
+/* ================= Delete Button ================= */
+.delete-btn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 75, 43, 0);
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 14px rgba(255, 75, 43, 0);
+}
+
+/* Slide out and fade out effect */
+.todo-item.delete {
+  opacity: 0;
+  transform: translateX(50px); /* slide to right */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.delete-btn:active {
+  transform: scale(0.9);
+  transition: transform 0.1s;
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 500px) {
+  .todo-item {
     flex-direction: column;
-    height: 100vh;
-    flex-grow: 10;
-}
-.side-bar{
-    height: 100vh;
-    flex-grow: 1;
-    max-width: 250px;
-}
-.menu-btns{
-    margin-top: 5px;
-    display: flex;
-    flex-direction: column;
+    align-items: flex-start;
     gap: 8px;
-    margin-bottom: 30px;
-    padding-left: 10px;
+  }
+
+  .task-buttons {
+    align-self: flex-end;
+  }
 }
-.project-btn{
-    margin-top: 5px;
-    display: flex;
-    padding-left: 10px;
-}
-.main{
-    height: 100vh;
-    overflow-y: auto;
-    scrollbar-width: none;
+.header {
+  background-image: linear-gradient(hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, 0)),
+    url("https://www.toptal.com/designers/subtlepatterns/uploads/paper_fibers.png");
+
+  background-size: cover; /* Makes image fill header completely */
+  background-position: center top; /* Focuses on the sky area */
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Keeps background steady when scrolling */
+  color: #2b2b2b;
+  text-align: center;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0);
 }
 
-.active{
-    border: 3px solid black;
-    padding: 10px;
-} 
+/* ================= Checkbox Styling ================= */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  background-color: #fff;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
 
+/* Hover effect */
+.task-checkbox:hover {
+  border-color: #2193b0;
+  box-shadow: 0 2px 8px rgba(33, 147, 176, 0.35);
+}
+
+/* Checked state */
+.task-checkbox:checked {
+  background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  border-color: #2193b0;
+  box-shadow: 0 0 12px rgba(33, 147, 176, 0.5),
+    0 0 24px rgba(109, 213, 237, 0.3);
+}
+/* Task item base styles */
+.todo-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  opacity: 1;
+  transform: translateX(0);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Checked task style */
+.todo-item.completed-task {
+  background-color: #d4edda; /* light green background */
+  color: #155724; /* dark green text */
+}
+
+/* Ripple effect for checkbox click */
+.todo-item.ripple::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 128, 0, 0.2); /* green ripple */
+  border-radius: 50%;
+  transform: scale(0) translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Trigger ripple on checked */
+.todo-item.completed-task.ripple::after {
+  transform: scale(3) translate(-50%, -50%);
+  opacity: 1;
+}
+
+/* Slide out (hide) animation */
+.todo-item.hide {
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+}
+
+/* Slide in (show) animation */
+.todo-item.show {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+/* Priority indicators for tasks */
+.todo-item[data-priority="High"] {
+  border-left: 5px solid #e74c3c; /* Red */
+}
+.todo-item[data-priority="Moderate"] {
+  border-left: 5px solid #f1c40f; /* Yellow */
+}
+.todo-item[data-priority="Low"] {
+  border-left: 5px solid #2ecc71; /* Green */
+}
+
+/* Optional: text color change based on priority */
+.todo-item[data-priority="High"] .task-detail-dueDiv h3 {
+  color: #e74c3c;
+}
+.todo-item[data-priority="Moderate"] .task-detail-dueDiv h3 {
+  color: #f1c40f;
+}
+.todo-item[data-priority="Low"] .task-detail-dueDiv h3 {
+  color: #2ecc71;
+}
+.todo-item {
+  background-color: #ffffff; /* default background */
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* Hover effect */
+.todo-item:hover {
+  transform: translateY(-3px); /* slight lift */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* bigger shadow */
+  background-color: #fef3e0; /* subtle highlight */
+}
+.todo-item:hover {
+  cursor: pointer;
+}
+@keyframes shiver {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.todo-item:hover {
+  animation: shiver 0.3s ease-in-out;
+  transform: translateY(-2px); /* slight lift */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.text {
+  justify-self: center;
+  font-size: x-large;
+  font-weight: bold;
+  color: #f1c40f;
+}

@@ -1,3 +1,4 @@
+
 import { currentProject } from "./defaultFolder";
 import { appendToDo, completedBox, myProjects, taskBox } from "./domstuff";
 import { completedTaskBtn } from "./completed";
@@ -43,12 +44,21 @@ submitBtn.addEventListener('click', (event) => {
         myProjects.querySelector(`[data-id="${projectFolderInput.value}"]`).classList.add('active');
         appendToDo(todoItemInputs);
         saveTodos(taskBox, completedBox); 
-        newTaskDialog.close();
+        newTaskDialog.classList.add("dialog-closing");
+        setTimeout(() => {
+            newTaskDialog.classList.remove("dialog-closing");
+            newTaskDialog.close();
+        }, 50); // match animation duration
     }
 })
 
-cancelBtn.addEventListener('click', () => {
-    newTaskDialog.close();
+cancelBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    newTaskDialog.classList.add("dialog-closing");
+    setTimeout(() => {
+        newTaskDialog.classList.remove("dialog-closing");
+        newTaskDialog.close();
+    }, 250); // match animation duration
 })
 
 newTaskBtn.forEach(btn => {
@@ -56,6 +66,7 @@ newTaskBtn.forEach(btn => {
         taskNameInput.value = '';
         dueDateInput.value = '';
         descriptionInput.value = '';
+        priorityInput.selectedIndex = 0;
         newTaskDialog.showModal();
     })
 })
