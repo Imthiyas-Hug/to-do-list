@@ -37,7 +37,7 @@
 
 
         <div class="my-projects">
-            <span style="font-weight: bold;">My Projects</span>
+            <span>My Projects</span>
             <div class="project-btn" data-id="0">
                 <img src="4f7502b516619bd506d6.svg" alt="folder" class="folder-icon">
                 <span>Default Project</span>
@@ -48,7 +48,7 @@
 
     <div class="container">
         <div class="header">
-            <h4>Active project</h2>
+            <h4>Active project</h4>
                 <h1 class="current-project"></h1>
         </div>
 
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <dialog class="create-task-dialog">
+    <dialog class="task-dialog create-task-dialog">
         <h1>Create New Task</h1>
         <form>
 
@@ -106,17 +106,17 @@
                 <label for="description">
                     Description
                 </label>
-                <input type="text" id="description" required>
+                <input type="text" id="description" required style="width: -webkit-fill-available;">
             </div>
 
             <div>
-                <button id="submit">Submit</button>
-                <button id="cancel">Cancel</button>
+                <button id="submit" class="task-button">Submit</button>
+                <button id="cancel" class="task-button">Cancel</button>
             </div>
         </form>
     </dialog>
 
-    <dialog class="edit-task-dialog">
+    <dialog class="task-dialog edit-task-dialog">
         <h1>Edit Task</h1>
         <form>
             <div>
@@ -155,19 +155,15 @@
             </div>
 
             <div>
-                <label for="description2">
-                    Description
-                </label>
-                <input type="text" id="description2">
+                <label for="description2"> Description <input type="text" id="description2" style="width: -webkit-fill-available;"></label>
             </div>
 
             <div>
-                <button id="submit3">Submit</button>
-                <button id="cancel3">Cancel</button>
+                <button id="submit3" class="task-button">Submit</button>
+                <button id="cancel3" class="task-button">Cancel</button>
             </div>
         </form>
     </dialog>
-
 
     <dialog class="create-project-dialog">
         <h1>
